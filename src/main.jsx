@@ -16,6 +16,7 @@ import App from "./App.jsx";
 import Signup from "./(auth)/sign-up/page.jsx";
 import Signin from "./(auth)/sign-in/page.jsx";
 import VerifyEmail from "./(auth)/verify-email/page.jsx";
+import Dashboard from "./dashboard/page.jsx";
 import { StrictMode } from "react";
 
 createRoot(document.getElementById("root")).render(
@@ -27,6 +28,7 @@ createRoot(document.getElementById("root")).render(
         <Route path="/signup" element={<Signup />} />
         <Route path="/signin" element={<Signin />} />
         <Route path="/verify-email" element={<VerifyEmail />} />
+        <Route path="/wallet" element={<Dashboard />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>,

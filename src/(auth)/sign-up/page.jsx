@@ -34,6 +34,7 @@ function SignUp() {
       email,
       password,
       options: {
+        emailRedirectTo: "http://localhost:5173/signin",
         data: {
           first_name: firstName,
           last_name: lastName,
@@ -45,12 +46,11 @@ function SignUp() {
     if (error) {
       setRegisterSuccess(error.message);
       setSuccessState(false);
-      setLoading(false); // stop loading if error
+      setLoading(false);
     } else {
       setRegisterSuccess("Account created! Check your email to confirm.");
       setSuccessState(true);
 
-      // Optional delay before redirect to show success message
       setTimeout(() => {
         setLoading(false);
         navigate("/verify-email");
@@ -170,7 +170,10 @@ function SignUp() {
             {loading == false ? (
               <span>Register</span>
             ) : (
-              <IconLoader2 stroke={2} className="animate-spin" />
+              <IconLoader2
+                stroke={2}
+                className="animate-spin ml-auto mr-auto"
+              />
             )}
           </button>
         </form>
