@@ -2,8 +2,14 @@ import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { IconLoader2 } from "@tabler/icons-react";
+import supabase from "../../lib/supabase";
 
 function SignUp() {
+  const [registerSuccess, setRegisterSuccess] = useState("");
+  const [successState, setSuccessState] = useState(null);
+  const [loading, setLoading] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -19,12 +25,37 @@ function SignUp() {
     }
   }, [navigate]);
 
-  const [registerSuccess, setRegisterSuccess] = useState("");
-  const [successState, setSuccessState] = useState(null);
-
   async function onSubmit(data) {
-    console.log(data);
-    navigate("/signin");
+    const { email, password, firstName, lastName, userName } = data;
+
+    setLoading(true); // start loading immediately
+
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          first_name: firstName,
+          last_name: lastName,
+          username: userName,
+        },
+      },
+    });
+
+    if (error) {
+      setRegisterSuccess(error.message);
+      setSuccessState(false);
+      setLoading(false); // stop loading if error
+    } else {
+      setRegisterSuccess("Account created! Check your email to confirm.");
+      setSuccessState(true);
+
+      // Optional delay before redirect to show success message
+      setTimeout(() => {
+        setLoading(false);
+        navigate("/verify-email");
+      }, 2000);
+    }
   }
 
   return (
@@ -132,8 +163,15 @@ function SignUp() {
           </p>
 
           {/* Register button */}
-          <button className="bg-slate-700 text-[18px] py-2 px-6 rounded-[10px] shadow shadow-indigo-800 cursor-pointer hover:bg-slate-600 min-w-full">
-            Register
+          <button
+            disabled={loading == true}
+            className="bg-slate-700 text-[18px] py-2 px-6 rounded-[10px] shadow shadow-indigo-800 cursor-pointer hover:bg-slate-600 min-w-full"
+          >
+            {loading == false ? (
+              <span>Register</span>
+            ) : (
+              <IconLoader2 stroke={2} className="animate-spin" />
+            )}
           </button>
         </form>
       </div>
