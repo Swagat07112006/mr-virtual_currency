@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useState, useEffect, useRef } from "react";
 import {
     IconWallet,
     IconArrowRight,
@@ -8,15 +9,41 @@ import {
     IconChartBar,
     IconUsers,
     IconArrowsExchange,
-    IconCoins,
-    IconTrendingUp,
-    IconBrandGithub,
-    IconBrandTwitter,
-    IconMail,
+    IconCircleCheck,
+    IconClock,
 } from "@tabler/icons-react";
 import Footer from "@/components/ui/footer";
 
 const LandingPage = () => {
+    // Live countdown timer for "Next Cycle"
+    const CYCLE_DURATION = 4 * 60 * 60; // 4 hours in seconds
+    const [secondsLeft, setSecondsLeft] = useState(CYCLE_DURATION);
+    const [balance, setBalance] = useState(12450.0);
+    const earned = useRef(0);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setSecondsLeft((prev) => {
+                if (prev <= 1) {
+                    // Cycle reset — add earnings
+                    earned.current += 25;
+                    setBalance((b) => b + 25);
+                    return CYCLE_DURATION;
+                }
+                return prev - 1;
+            });
+        }, 1000);
+        return () => clearInterval(interval);
+    }, []);
+
+    const formatTime = (s) => {
+        const h = Math.floor(s / 3600);
+        const m = Math.floor((s % 3600) / 60);
+        const sec = s % 60;
+        return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:${String(sec).padStart(2, "0")}`;
+    };
+
+    const cycleProgress = ((CYCLE_DURATION - secondsLeft) / CYCLE_DURATION) * 100;
     const statsList = [
         { value: "3", label: "Active Users" },
         { value: "$1K+", label: "Transactions" },
@@ -181,40 +208,62 @@ const LandingPage = () => {
                     </div>
                 </div>
 
-                {/* Image of Hero Section */}
+                {/* Hero Visual */}
 
                 <div className="flex-1 flex justify-center">
-                    <div className="relative w-72 h-72 md:w-80 md:h-80">
-                        <div className="absolute inset-0 bg-violet-500/15 rounded-full blur-3xl animate-pulse" />
+                    <div className="relative w-full max-w-[420px]">
 
-                        <div className="absolute inset-0 flex items-center justify-center">
-                            <div className="w-32 h-32 rounded-full bg-linear-to-br from-violet-500 to-blue-600 flex items-center justify-center shadow-2xl shadow-violet-500/40 ring-2 ring-violet-400/20">
-                                <IconCurrencyBitcoin className="size-16 text-white" />
-                            </div>
+                        {/* Ambient glow */}
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[110%] h-[110%] bg-violet-600/15 rounded-full blur-[100px]" />
+                        <div className="absolute top-1/3 left-1/3 w-[60%] h-[60%] bg-blue-500/10 rounded-full blur-[80px]" />
+
+                        {/* Main hero image */}
+                        <div className="relative z-[1]">
+                            <img
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZT2biDBjCzXiw6RApUxSdemr7vvaxy-8cSsTxxjHM5YWj3PlmJIz2UkuPueQBMJM2jwLWvpzg7BxqYVrJR4DO888NZX7PsNk9p9N6V408xiK37YX8OIWNyUqkMH1tHqM6XkvX7yfVCciGzJnw0G1E2iBHfOnbdbV8baFjA10RPqynoLIencjIK8YKslGCI3cKIJ0jzKbHsrUYHOR5zhG18xO6O0fKZh7vo6-nr_LoZNIteQFwZrLYAWiUdZNBQ62_WugyXoFBOhI"
+                                alt="MR Virtual Currency"
+                                className="w-full h-auto object-contain rounded-2xl drop-shadow-[0_20px_60px_rgba(139,92,246,0.25)]"
+                            />
                         </div>
 
-                        <div className="absolute top-2 right-6 bg-slate-800/80 border border-slate-700/60 rounded-xl p-3 shadow-lg backdrop-blur-sm">
+                        {/* Floating widget — Status (top-right) */}
+                        <div className="absolute top-4 -right-2 md:-right-6 z-[2] bg-slate-900/90 backdrop-blur-xl border border-slate-700/50 rounded-xl px-4 py-2.5 shadow-xl shadow-black/40 animate-[float_3s_ease-in-out_infinite]">
                             <div className="flex items-center gap-2">
-                                <IconTrendingUp className="size-5 text-green-400" />
-                                <span className="text-sm font-semibold text-green-400">
-                                    +24.5%
+                                <span className="relative flex h-2.5 w-2.5">
+                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
                                 </span>
+                                <span className="font-bold text-emerald-400 text-xs">Active</span>
                             </div>
                         </div>
 
-                        <div className="absolute bottom-4 left-2 bg-slate-800/80 border border-slate-700/60 rounded-xl p-3 shadow-lg backdrop-blur-sm">
-                            <div className="flex items-center gap-2">
-                                <IconCoins className="size-5 text-yellow-400" />
-                                <span className="text-sm font-semibold">12,450 VC</span>
+                        {/* Floating widget — Timer (bottom-right) */}
+                        <div className="absolute bottom-16 -right-3 md:-right-8 z-[2] bg-slate-900/90 backdrop-blur-xl border border-slate-700/50 rounded-xl px-4 py-2.5 shadow-xl shadow-black/40 animate-[float_3s_ease-in-out_infinite_0.8s]">
+                            <p className="text-[9px] text-slate-500 uppercase tracking-wider mb-0.5">Next Cycle</p>
+                            <div className="flex items-center gap-1.5">
+                                <IconClock className="size-3.5 text-amber-400" />
+                                <span className="font-mono font-bold text-amber-400 text-sm">{formatTime(secondsLeft)}</span>
                             </div>
                         </div>
 
-                        <div className="absolute top-1/2 -translate-y-1/2 -left-2 bg-slate-800/80 border border-slate-700/60 rounded-xl p-3 shadow-lg backdrop-blur-sm">
-                            <IconShieldCheck className="size-5 text-cyan-400" />
+                        {/* Floating widget — Balance (bottom-left) */}
+                        <div className="absolute bottom-8 -left-3 md:-left-10 z-[2] bg-slate-900/90 backdrop-blur-xl border border-slate-700/50 rounded-xl px-4 py-3 shadow-xl shadow-black/40 animate-[float_3s_ease-in-out_infinite_1.5s]">
+                            <p className="text-[9px] text-slate-500 uppercase tracking-wider mb-1">Balance</p>
+                            <span className="text-lg font-bold bg-linear-to-r from-violet-400 via-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                                {balance.toLocaleString()} VC
+                            </span>
+                            <div className="mt-1.5 h-1.5 w-32 bg-slate-700/50 rounded-full overflow-hidden">
+                                <div
+                                    className="h-full bg-linear-to-r from-violet-500 to-blue-500 rounded-full transition-all duration-1000 ease-linear"
+                                    style={{ width: `${cycleProgress}%` }}
+                                />
+                            </div>
                         </div>
 
-                        <div className="absolute bottom-8 right-0 bg-slate-800/80 border border-slate-700/60 rounded-xl p-3 shadow-lg backdrop-blur-sm">
-                            <IconBolt className="size-5 text-amber-400" />
+                        {/* Floating widget — Earned (top-left) */}
+                        <div className="absolute top-12 -left-2 md:-left-8 z-[2] bg-slate-900/90 backdrop-blur-xl border border-violet-500/20 rounded-xl px-4 py-2.5 shadow-xl shadow-black/40 animate-[float_3s_ease-in-out_infinite_2.2s]">
+                            <p className="text-[9px] text-slate-500 uppercase tracking-wider mb-0.5">Earned</p>
+                            <span className="text-sm font-bold text-violet-400">+{earned.current} VC</span>
                         </div>
                     </div>
                 </div>
