@@ -55,7 +55,7 @@ export default function Transaction() {
             </div>
 
             <div className="flex justify-end">
-              <button class="bg-blue-500 text-white px-4 py-2 rounded font-bold cursor-pointer">
+              <button className="bg-blue-500 text-white px-4 py-2 rounded font-bold cursor-pointer">
                 Transfer
               </button>
             </div>
