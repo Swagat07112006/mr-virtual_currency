@@ -22,7 +22,7 @@ import Dashboard from "./dashboard/page.jsx";
 import Earn from "./dashboard/earn/page";
 import Withdraw from "./dashboard/withdraw/page";
 import Transaction from "./dashboard/transaction/page";
-import History from "./dashboard/history/page";
+import History from "./dashboard/history/chatinya";
 import Profile from "./dashboard/profile/page";
 import { StrictMode } from "react";
 
