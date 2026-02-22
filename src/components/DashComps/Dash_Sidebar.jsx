@@ -69,16 +69,19 @@ export default function AppSidebar() {
               {/* wait */}
               <SidebarMenuItem className={`fixed  bottom-0 py-4`}>
                 <SidebarMenuButton asChild>
-                  <Link
-                    to="/wallet/profile"
-                    className="flex items-center gap-3 "
-                  >
-                    {/* <a href={"/profile"} className="flex items-center gap-3 "> */}
-                    <span>
-                      <Users size={28} />
-                    </span>
+                  <Link to="/wallet/profile" className="py-6">
+                    <div className="flex flex-row gap-4 items-center">
+                      <div className="w-10 h-10 flex items-center justify-center rounded-full bg-[oklch(0.97_0_0)] text-[oklch(0.556_0_0)] text-[16px]">
+                        JD
+                      </div>
 
-                    <span className="text-2xl "> Profile </span>
+                      <div className="text-sm font-medium">
+                        John Doe
+                        <p className="text-[oklch(0.556_0_0)] text-sm">
+                          johndoe@mail.com
+                        </p>
+                      </div>
+                    </div>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
