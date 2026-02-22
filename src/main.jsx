@@ -24,13 +24,15 @@ import Withdraw from "./dashboard/withdraw/page";
 import Transaction from "./dashboard/transaction/page";
 import History from "./dashboard/history/chatinya";
 import Profile from "./dashboard/profile/page";
+import LandingPage from "./landing_page/page";
 import { StrictMode } from "react";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<App />} />
+        {/* Landing Page route Added :) */}
+        <Route path="/" element={<LandingPage />} />
 
         <Route path="/signup" element={<Signup />} />
         <Route path="/signin" element={<Signin />} />
